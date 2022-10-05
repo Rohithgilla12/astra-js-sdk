@@ -1,4 +1,4 @@
-import { AstraCard, AstraListCardsResponse } from './types'
+import { AstraCard, AstraListCardsResponse, CreateAstraCard } from './types'
 import { Axios, AxiosResponse } from 'axios'
 
 import { AstraResponse } from '../../lib/AstraResponse'
@@ -19,6 +19,25 @@ export class CardsResource {
   constructor(client: Axios, auth: AuthResource) {
     this._client = client
     this._auth = auth
+  }
+
+  /**
+   * Create a card for a user
+   */
+  async createCard(card: CreateAstraCard): Promise<AstraResponse<AstraCard>> {
+    const headers: { [key: string]: string } = {
+      Authorization: `Bearer ${this._auth.accessToken}`,
+    }
+
+    const response = await this._client.post<AstraCard, AxiosResponse<AstraCard>>(this._path, card, {
+      headers,
+    })
+
+    if (response.status > 201) {
+      throw new AstraResponseError(response.statusText, response.status, response.data)
+    }
+
+    return response.data
   }
 
   /**

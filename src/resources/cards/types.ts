@@ -12,3 +12,12 @@ export interface AstraListCardsResponse {
   cards: AstraCard[]
   count: number
 }
+
+export interface CreateAstraCard {
+  card_number: string
+  card_security_code: string
+  first_name: string
+  last_name: string
+  expiration_date: string
+  zip_code: string
+}
